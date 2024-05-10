@@ -9,6 +9,8 @@ const PORT = 3000;
 app.get('/', (req, res) => {
     res.send('Hello, it is will be our chat!');
 });
+app.post('/signup', (req, res) => {
+});
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
 });
