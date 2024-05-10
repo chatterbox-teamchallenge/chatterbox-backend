@@ -4,13 +4,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
+const database_1 = __importDefault(require("./database"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const app = (0, express_1.default)();
-const PORT = 3000;
-app.get('/', (req, res) => {
-    res.send('Hello, it is will be our chat!');
+const PORT = process.env.PORT;
+app.use(express_1.default.json());
+app.use('/users', userRoutes_1.default);
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something went wrong!');
 });
-app.post('/signup', (req, res) => {
+app.get('/', (req, res) => {
+    res.send('The app is working, keep grinding!');
 });
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
 });
+(0, database_1.default)();
