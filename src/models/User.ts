@@ -1,10 +1,11 @@
 import mongoose, { Document, Schema } from "mongoose";
-import bcrypt, { compare } from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 interface UserDocument extends Document {
     email: string;
     username: string;
     password: string;
+    chats: Array<Schema.Types.ObjectId>;
     comparePassword(password: string): Promise<boolean>;
 }
 
@@ -22,7 +23,11 @@ const userSchema = new Schema<UserDocument>({
     password: {
         type: String,
         required: true
-    }
+    },
+    chats: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Chat'
+    }]
 });
 
 userSchema.pre<UserDocument>('save', async function (next) {
