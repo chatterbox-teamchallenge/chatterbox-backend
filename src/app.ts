@@ -1,16 +1,27 @@
-import express, { Application, Request, Response } from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express';
+import userRoutes from './routes/userRoutes';
+import connectDB from './database';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app: Application = express();
-const PORT: number = 3000;
+const PORT = process.env.PORT;
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Hello, it is will be our chat!')
-})
+app.use(express.json());
 
-app.post('/signup', (req: Request, res: Response) => {
-    
-})
+app.use('/users', userRoutes);
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(err.stack);
+    res.status(500).send('Something went wrong!');
+});
+
+app.get('/', (req, res) => {
+    res.send('The app is working, keep grinding!');
+});
 
 app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`)
-})
+    console.log(`Server is running at http://localhost:${PORT}`);
+});
+
+connectDB();
