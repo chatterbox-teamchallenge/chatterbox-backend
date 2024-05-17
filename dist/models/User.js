@@ -71,5 +71,11 @@ userSchema.methods.comparePassword = function (password) {
         return yield bcrypt_1.default.compare(password, this.password);
     });
 };
+userSchema.methods.updatePassword = function (newPassword) {
+    return __awaiter(this, void 0, void 0, function* () {
+        this.password = newPassword;
+        yield this.save();
+    });
+};
 const User = mongoose_1.default.model('User', userSchema);
 exports.default = User;
