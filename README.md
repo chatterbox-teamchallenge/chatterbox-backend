@@ -1,10 +1,11 @@
 # Chat TeamChallenge Node&TypeScript App
 ## CRUD RESTful API
 
-At this very point the app has only two endpoints:
+At this very point the app has the following endpoints:
 
 - [/users/signup](#signup)
 - [/users/login](#login)
+- [/users/updatePassword](#updatePassword)
 
 To start the app simply type the:
 
@@ -27,5 +28,13 @@ In order to create user you will need to add the URL of your local Mongo DataBas
 {
     "username": "example",
     "password": "some_password"
+}
+```
+/updatePassword
+```
+{
+    "username": "example211",
+    "oldPassword": "simple_pass_updated",
+    "newPassword": "simple_pass_"
 }
 ```
