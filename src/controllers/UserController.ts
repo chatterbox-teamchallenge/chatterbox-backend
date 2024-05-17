@@ -33,4 +33,25 @@ const login = async (req: Request, res: Response) => {
     }
 };
 
-export default { signup, login };
+const updatePassword = async (req: Request, res: Response) => {
+    const { username, oldPassword, newPassword } = req.body;
+
+    try {
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const isMatch = await user.comparePassword(oldPassword);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid password' });
+        }
+
+        await user.updatePassword(newPassword);
+        res.status(200).json({ message: 'Password updated successfully' })
+    } catch (e: any) {
+        res.status(500).json({ message: e.message });
+    }
+};
+
+export default { signup, login, updatePassword };

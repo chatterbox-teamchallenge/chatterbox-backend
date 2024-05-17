@@ -7,6 +7,7 @@ interface UserDocument extends Document {
     password: string;
     chats: Array<Schema.Types.ObjectId>;
     comparePassword(password: string): Promise<boolean>;
+    updatePassword(newPassword: string): Promise<void>;
 }
 
 const userSchema = new Schema<UserDocument>({
@@ -40,6 +41,11 @@ userSchema.pre<UserDocument>('save', async function (next) {
 
 userSchema.methods.comparePassword = async function (password: string) {
     return await bcrypt.compare(password, this.password);
+}
+
+userSchema.methods.updatePassword = async function (newPassword: string) {
+    this.password = newPassword;
+    await this.save();
 }
 
 const User = mongoose.model<UserDocument>('User', userSchema);

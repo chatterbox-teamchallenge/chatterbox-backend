@@ -41,4 +41,22 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ message: e.message });
     }
 });
-exports.default = { signup, login };
+const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username, oldPassword, newPassword } = req.body;
+    try {
+        const user = yield User_1.default.findOne({ username });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        const isMatch = yield user.comparePassword(oldPassword);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid password' });
+        }
+        yield user.updatePassword(newPassword);
+        res.status(200).json({ message: 'Password updated successfully' });
+    }
+    catch (e) {
+        res.status(500).json({ message: e.message });
+    }
+});
+exports.default = { signup, login, updatePassword };
