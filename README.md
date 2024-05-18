@@ -16,7 +16,7 @@ npm start
 
 In order to create user you will need to add the URL of your local Mongo DataBase and set the port in .env file. The payload of data to add to the DB as following:
 
-/signup:
+POST /signup:
 ```
 {
     "email": "some@email.com",
@@ -24,14 +24,14 @@ In order to create user you will need to add the URL of your local Mongo DataBas
     "password": "some_password"
 }
 ```
-/login:
+POST /login:
 ```
 {
     "username": "example",
     "password": "some_password"
 }
 ```
-/updatePassword
+PUT /updatePassword
 ```
 {
     "username": "example211",
