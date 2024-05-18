@@ -10,6 +10,7 @@ At this very point the app has the following endpoints:
 To start the app simply type the:
 
 ```
+tsc
 npm start
 ```
 
