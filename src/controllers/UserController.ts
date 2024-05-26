@@ -1,6 +1,10 @@
 import { Request, Response } from 'express';
 import User from '../models/User';
 
+/**
+ * TODO
+ * 1) email confirm & username generate & jwt token;
+ */
 const signup = async (req: Request, res: Response) => {
     const { username, email, password } = req.body;
     const user = new User({ username, email, password })
@@ -13,6 +17,10 @@ const signup = async (req: Request, res: Response) => {
     }
 }
 
+/**
+ * TODO
+ * 1) login with email OR username;
+ */
 const login = async (req: Request, res: Response) => {
     const { username, password } = req.body;
 

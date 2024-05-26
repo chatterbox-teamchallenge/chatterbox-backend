@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 interface UserDocument extends Document {
     email: string;
     username: string;
+    name: string;
     password: string;
     chats: Array<Schema.Types.ObjectId>;
     comparePassword(password: string): Promise<boolean>;
@@ -18,8 +19,10 @@ const userSchema = new Schema<UserDocument>({
     },
     username: {
         type: String,
-        unique: true,
-        required: true
+        unique: true
+    },
+    name: {
+        type: String
     },
     password: {
         type: String,
