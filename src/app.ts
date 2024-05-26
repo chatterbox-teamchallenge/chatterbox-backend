@@ -11,10 +11,10 @@ const PORT = process.env.PORT;
 app.use(express.json());
 
 app.use(cors({
-    origin: 'http://localhost:'+PORT,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true
+    origin: "http://localhost:3000"
 }));
+
+app.options('*', cors())
 
 app.use('/users', userRoutes);
 
