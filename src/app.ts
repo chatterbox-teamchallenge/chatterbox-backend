@@ -1,4 +1,5 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
+import cors from 'cors';
 import userRoutes from './routes/userRoutes';
 import connectDB from './database';
 import dotenv from 'dotenv';
@@ -8,6 +9,12 @@ const app: Application = express();
 const PORT = process.env.PORT;
 
 app.use(express.json());
+
+app.use(cors({
+    origin: 'http://localhost:'+PORT,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true
+}));
 
 app.use('/users', userRoutes);
 
