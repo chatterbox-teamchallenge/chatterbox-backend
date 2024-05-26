@@ -28,6 +28,10 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(400).json({ message: e.message });
     }
 });
+/**
+ * TODO
+ * 1) login with email OR username;
+ */
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body;
     try {
