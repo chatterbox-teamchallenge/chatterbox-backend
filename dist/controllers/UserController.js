@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const unique_username_generator_1 = require("unique-username-generator");
 const User_1 = __importDefault(require("../models/User"));
 /**
  * TODO
@@ -19,7 +20,12 @@ const User_1 = __importDefault(require("../models/User"));
  */
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, email, password } = req.body;
-    const user = new User_1.default({ username, email, password });
+    const randomUsername = (0, unique_username_generator_1.generateFromEmail)(email, 5);
+    const user = new User_1.default({
+        username: username || randomUsername,
+        email,
+        password
+    });
     try {
         yield user.save();
         res.status(200).json({ message: 'User created successfully!' });
