@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.post('/signup', UserController.signup);
 router.post('/login', UserController.login);
-router.put('/updatePassword', UserController.updatePassword);
+router.put('/update-pass', UserController.updatePassword);
+router.get('/confirm-email/:token', UserController.confirmUser);
 
 export default router;

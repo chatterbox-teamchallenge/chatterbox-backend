@@ -37,39 +37,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const userSchema = new mongoose_1.Schema({
-    email: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    username: {
-        type: String,
-        unique: true
-    },
-    name: {
-        type: String
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    chats: [{
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'Chat'
-        }]
+const pendingUserSchema = new mongoose_1.Schema({
+    username: { type: String, required: true },
+    email: { type: String, required: true },
+    password: { type: String, required: true },
+    confirmationToken: { type: String, required: true }
 });
-userSchema.methods.comparePassword = function (password) {
+pendingUserSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield bcrypt_1.default.compare(password, this.password);
-    });
-};
-userSchema.methods.updatePassword = function (newPassword) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const hash = yield bcrypt_1.default.hash(newPassword, 10);
+        if (!this.isModified('password'))
+            return next();
+        const hash = yield bcrypt_1.default.hash(this.password, 10);
         this.password = hash;
-        yield this.save();
+        next();
     });
-};
-const User = mongoose_1.default.model('User', userSchema);
-exports.default = User;
+});
+const PendingUser = mongoose_1.default.model('PendingUser', pendingUserSchema);
+exports.default = PendingUser;

@@ -34,20 +34,13 @@ const userSchema = new Schema<UserDocument>({
     }]
 });
 
-userSchema.pre<UserDocument>('save', async function (next) {
-    if (!this.isModified('password')) return next();
-
-    const hash = await bcrypt.hash(this.password, 10);
-    this.password = hash;
-    next();
-});
-
 userSchema.methods.comparePassword = async function (password: string) {
     return await bcrypt.compare(password, this.password);
 }
 
-userSchema.methods.updatePassword = async function (newPassword: string) {
-    this.password = newPassword;
+userSchema.methods.updatePassword = async function (newPassword: string): Promise<void> {
+    const hash = await bcrypt.hash(newPassword, 10);
+    this.password = hash;
     await this.save();
 }
 
