@@ -1,18 +1,24 @@
 import { Request, Response } from 'express';
+import { generateFromEmail } from "unique-username-generator";
 import User from '../models/User';
 
 /**
  * TODO
- * 1) email confirm & username generate & jwt token;
+ * 1) email confirm & jwt token;
  */
 const signup = async (req: Request, res: Response) => {
     const { username, email, password } = req.body;
-    const user = new User({ username, email, password })
+    const randomUsername = generateFromEmail(email, 5);
+    const user = new User({
+        username: username || randomUsername,
+        email,
+        password
+    })
 
     try {
         await user.save();
         res.status(200).json({ message: 'User created successfully!' });
-    } catch(e: any) {
+    } catch (e: any) {
         res.status(400).json({ message: e.message })
     }
 }
