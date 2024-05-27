@@ -20,7 +20,7 @@ POST /signup:
 ```
 {
     "email": "some@email.com",
-    "username": "example", -- optional and generates randomly of user does not provide any 
+    "username": "example", -- optional and generates randomly if user does not provide any 
     "password": "some_password"
 }
 ```
