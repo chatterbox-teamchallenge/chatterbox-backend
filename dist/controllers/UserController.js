@@ -16,7 +16,7 @@ const unique_username_generator_1 = require("unique-username-generator");
 const User_1 = __importDefault(require("../models/User"));
 /**
  * TODO
- * 1) email confirm & username generate & jwt token;
+ * 1) email confirm & jwt token;
  */
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, email, password } = req.body;
@@ -34,14 +34,10 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(400).json({ message: e.message });
     }
 });
-/**
- * TODO
- * 1) login with email OR username;
- */
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { username, password } = req.body;
+    const { login, password } = req.body;
     try {
-        const user = yield User_1.default.findOne({ username });
+        const user = yield User_1.default.findOne({ $or: [{ username: login }, { email: login }] });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }

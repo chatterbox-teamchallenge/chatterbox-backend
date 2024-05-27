@@ -23,15 +23,11 @@ const signup = async (req: Request, res: Response) => {
     }
 }
 
-/**
- * TODO
- * 1) login with email OR username;
- */
 const login = async (req: Request, res: Response) => {
-    const { username, password } = req.body;
+    const { login, password } = req.body;
 
     try {
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ $or: [{ username: login }, { email: login }] });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
