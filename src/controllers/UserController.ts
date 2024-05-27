@@ -1,25 +1,53 @@
 import { Request, Response } from 'express';
 import { generateFromEmail } from "unique-username-generator";
 import User from '../models/User';
+import PendingUser from '../models/PendingUser';
+import ConfirmEmail from '../middleware/confirmEmail';
 
 /**
- * TODO
- * 1) email confirm & jwt token;
+ * TODO: jwt token;
  */
 const signup = async (req: Request, res: Response) => {
     const { username, email, password } = req.body;
     const randomUsername = generateFromEmail(email, 5);
-    const user = new User({
+    const confirmationToken = ConfirmEmail.generateToken();
+    const pendingUser = new PendingUser({
         username: username || randomUsername,
         email,
-        password
-    })
+        password,
+        confirmationToken
+    });
 
     try {
-        await user.save();
-        res.status(200).json({ message: 'User created successfully!' });
+        await pendingUser.save();
+        await ConfirmEmail.sendConfirmationEmail(pendingUser, confirmationToken);
+        res.status(200).json({ message: 'User created successfully! Please confirm your email.' });
     } catch (e: any) {
-        res.status(400).json({ message: e.message })
+        res.status(400).json({ message: e.message });
+    }
+};
+
+const confirmUser = async (req: Request, res: Response) => {
+    const { token } = req.params;
+
+    try {
+        const pendingUser = await PendingUser.findOne({ confirmationToken: token });
+        if (!pendingUser) {
+            return res.status(400).json({ message: 'Invalid token' });
+        }
+
+        const user = new User({
+            username: pendingUser.username,
+            email: pendingUser.email,
+            password: pendingUser.password
+        });
+
+        await user.save();
+        await PendingUser.deleteOne({ confirmationToken: token });
+
+        res.status(200).json({ message: 'Email confirmed successfully!' });
+    } catch (e: any) {
+        res.status(500).json({ message: e.message });
     }
 }
 
@@ -64,4 +92,4 @@ const updatePassword = async (req: Request, res: Response) => {
     }
 };
 
-export default { signup, login, updatePassword };
+export default { signup, login, updatePassword, confirmUser };

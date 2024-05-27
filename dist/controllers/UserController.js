@@ -14,24 +14,48 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const unique_username_generator_1 = require("unique-username-generator");
 const User_1 = __importDefault(require("../models/User"));
+const PendingUser_1 = __importDefault(require("../models/PendingUser"));
+const confirmEmail_1 = __importDefault(require("../middleware/confirmEmail"));
 /**
- * TODO
- * 1) email confirm & jwt token;
+ * TODO: jwt token;
  */
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, email, password } = req.body;
     const randomUsername = (0, unique_username_generator_1.generateFromEmail)(email, 5);
-    const user = new User_1.default({
+    const confirmationToken = confirmEmail_1.default.generateToken();
+    const pendingUser = new PendingUser_1.default({
         username: username || randomUsername,
         email,
-        password
+        password,
+        confirmationToken
     });
     try {
-        yield user.save();
-        res.status(200).json({ message: 'User created successfully!' });
+        yield pendingUser.save();
+        yield confirmEmail_1.default.sendConfirmationEmail(pendingUser, confirmationToken);
+        res.status(200).json({ message: 'User created successfully! Please confirm your email.' });
     }
     catch (e) {
         res.status(400).json({ message: e.message });
+    }
+});
+const confirmUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { token } = req.params;
+    try {
+        const pendingUser = yield PendingUser_1.default.findOne({ confirmationToken: token });
+        if (!pendingUser) {
+            return res.status(400).json({ message: 'Invalid token' });
+        }
+        const user = new User_1.default({
+            username: pendingUser.username,
+            email: pendingUser.email,
+            password: pendingUser.password
+        });
+        yield user.save();
+        yield PendingUser_1.default.deleteOne({ confirmationToken: token });
+        res.status(200).json({ message: 'Email confirmed successfully!' });
+    }
+    catch (e) {
+        res.status(500).json({ message: e.message });
     }
 });
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -69,4 +93,4 @@ const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.status(500).json({ message: e.message });
     }
 });
-exports.default = { signup, login, updatePassword };
+exports.default = { signup, login, updatePassword, confirmUser };
