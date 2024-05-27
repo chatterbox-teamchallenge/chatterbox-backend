@@ -3,9 +3,9 @@
 
 At this very point the app has the following endpoints:
 
-- [/users/signup](#signup)
-- [/users/login](#login)
-- [/users/updatePassword](#updatePassword)
+- [/api/users/signup](#signup)
+- [/api/users/login](#login)
+- [/api/users/updatePassword](#updatePassword)
 
 To start the app simply type the:
 
@@ -20,7 +20,7 @@ POST /signup:
 ```
 {
     "email": "some@email.com",
-    "username": "example",
+    "username": "example", -- optional and generates randomly of user does not provide any 
     "password": "some_password"
 }
 ```
