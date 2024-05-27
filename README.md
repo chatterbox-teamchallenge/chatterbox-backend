@@ -5,7 +5,8 @@ At this very point the app has the following endpoints:
 
 - [/api/users/signup](#signup)
 - [/api/users/login](#login)
-- [/api/users/updatePassword](#updatePassword)
+- [/api/users/update-pass](#updatePassword)
+- [/api/users/confirm-email/:token](#emailConfirm)
 
 To start the app simply type the:
 
@@ -39,3 +40,4 @@ PUT /updatePassword
     "newPassword": "simple_pass_"
 }
 ```
+GET /confirm-email/:token - confirms email and adds active user to DB by token validation
