@@ -27,7 +27,7 @@ POST /signup:
 POST /login (user able to login with email OR username):
 ```
 {
-    "username": "example", OR "email": "example@example.com"
+    "login": "example", OR "login": "example@example.com"
     "password": "some_password"
 }
 ```
