@@ -34,7 +34,7 @@ const sendConfirmationEmail = (user, token) => __awaiter(void 0, void 0, void 0,
         from: 'confirm chatterbox',
         to: user.email,
         subject: 'Confirm your email for Chatterbox',
-        text: `Please confirm your email for Chatterbox account activation by following ${process.env.API_INSTANCE_URL}confirm-email/${token}`
+        text: `Please confirm your email for Chatterbox account activation by following ${process.env.API_INSTANCE_URL}${process.env.API_CONFIRM_EMAIL_ENDPOINT}${token}`
     };
     try {
         yield transporter.sendMail(mailOptions);
