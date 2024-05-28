@@ -16,9 +16,6 @@ const unique_username_generator_1 = require("unique-username-generator");
 const User_1 = __importDefault(require("../models/User"));
 const PendingUser_1 = __importDefault(require("../models/PendingUser"));
 const confirmEmail_1 = __importDefault(require("../middleware/confirmEmail"));
-/**
- * TODO: jwt token;
- */
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, email, password } = req.body;
     const randomUsername = (0, unique_username_generator_1.generateFromEmail)(email, 5);

@@ -1,12 +1,12 @@
+/**
+ * TODO: jwt token;
+ */
 import { Request, Response } from 'express';
 import { generateFromEmail } from "unique-username-generator";
 import User from '../models/User';
 import PendingUser from '../models/PendingUser';
 import ConfirmEmail from '../middleware/confirmEmail';
 
-/**
- * TODO: jwt token;
- */
 const signup = async (req: Request, res: Response) => {
     const { username, email, password } = req.body;
     const randomUsername = generateFromEmail(email, 5);
